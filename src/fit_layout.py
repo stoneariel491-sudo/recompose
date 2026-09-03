@@ -39,12 +39,37 @@ MIN_LINES = 20
 
 
 def leaf_lines(path):
-    """[(top, bottom, left, right)] for one leaf, plus its height and width."""
+    """[(top, bottom, left, right)] for one leaf, plus its height and width.
+
+    THE THRESHOLD IS THE LEAF'S OWN. A fixed 128 was right for the case study's hand-cleaned
+    1-bit plates and wrong for the same pages composited out of the original PDF by stage 1,
+    which are greyscale and lower in contrast: the measure came out 3.1 per cent low against
+    1.2 for the same leaves cleaned. A pipeline whose stage 2 only works on the output of a
+    hand pass is not a pipeline, so the threshold is read off each leaf's own histogram - the
+    same correction stage 1 needed, for the same reason.
+    """
     from PIL import Image
     import numpy as np
     a = np.array(Image.open(path).convert("L"))
-    rows = ink_rows(a, head_band=0.0, min_height=8)
-    return rows, a.shape[0], a.shape[1], float((a < 128).mean())
+    t = _otsu(a)
+    rows = ink_rows(a, head_band=0.0, min_height=8, threshold=t)
+    return rows, a.shape[0], a.shape[1], float((a < t).mean())
+
+
+def _otsu(g):
+    import numpy as np
+    hist = np.bincount(g.ravel(), minlength=256).astype(float)
+    total = hist.sum()
+    if not total:
+        return 128
+    p = hist / total
+    w = np.cumsum(p)
+    m = np.cumsum(p * np.arange(256))
+    mt = m[-1]
+    with np.errstate(divide="ignore", invalid="ignore"):
+        between = (mt * w - m) ** 2 / (w * (1 - w))
+    between[~np.isfinite(between)] = 0
+    return int(np.argmax(between))
 
 
 def body_leaves(paths, want):

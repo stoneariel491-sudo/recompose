@@ -17,9 +17,36 @@ treatment, and a pipeline that treats them alike destroys one of them. The discr
 fraction: a threshold at 0.11 separated the two photographic leaves of the case study from the
 354 stencils, and the fraction is a property of the leaf, not of a guess about it.
 
-**Extract each page at its native resolution.** Not a re-render of the composited page — the
-stencil itself. A 1-bit JBIG2 stencil re-rendered at 300 dpi has already lost the evidence that
+**Composite each page at the native resolution of its highest layer.** The reason is unchanged
+and is the whole point: a 1-bit stencil re-rendered at 300 dpi has already lost the evidence that
 decides whether a mark broke or merely thinned.
+
+**But "extract the image, never re-render the page" is wrong, and it was written here and
+refuted by running it.** A scanned PDF is normally mixed raster content: each page carries a
+blurred background at 200 dpi and a stencil at 600, and the foreground layer pulled out ALONE is
+not the leaf — measured, it never rises above grey 167 where paper would be 255. Composited at
+the dpi the top layer implies, the same pages come out byte for byte the size the case study's
+plates were extracted at by hand, with 0.017 per cent of pixels differing. Native resolution is
+preserved because the dpi is READ OFF the layer rather than chosen.
+
+Three rules were needed and each looked sufficient until it was tried. **Counting images is not
+enough**: every page of one processed PDF carries two, and both are one pixel square. **Covering
+the page is not enough either**: a 1×1 image stretched over the leaf has a perfect placement
+rectangle and carries nothing — so an image is a leaf when it covers the page *and* resolves it.
+**And a real scan carries two of them**, which is the normal structure and not an anomaly.
+
+**A stencil's polarity is not guaranteed, and the discriminator is true of every book: a page of
+type is never more than half ink.** A fraction above a half is a stored polarity running the
+other way, not a very black page. Stronger than sniffing the colour space, because it is a fact
+about the leaf rather than about how someone encoded it.
+
+**And the ink threshold is the leaf's own.** A fixed 128 read a full page of type as 0.26 per
+cent ink and called it blank, because that leaf was scanned faint under a gradient; half a test
+range was classified blank that way and the other half was not, purely from the scanner's
+exposure alternating. Otsu per leaf — **and refused where Otsu's own two-mode assumption fails**,
+which a faint gradient-lit leaf violates. Below a separability of 0.70 the leaf is reported as
+*unbinarised*: not blank, not photographic, not a guess. It needs a local threshold, and that is
+named as work rather than faked with a global number that happens to run.
 
 **Take the text layer as a hint and never as truth.** In the case study the OCR read commas as
 full stops throughout an index, read the figure one as a capital I, gave every word on four
@@ -27,7 +54,11 @@ leaves an identical synthesised height of 5.0 pt, and put two adjacent lines in 
 It was still useful: its geometry located the columns. **What a bad instrument is good for is a
 question with an answer, and the answer is rarely "nothing".**
 
-*Automated.* All of it.
+*Automated.* All of it, and runnable: `python src/ingest.py <scan.pdf> <out>` writes the leaves
+and a manifest carrying, per leaf, its ink fraction, its separability, its kind, and **how it was
+obtained** — composited, rendered, polarity inverted — so a later stage can refuse rather than
+guess. Verified end to end against the case study's original: 41 of 41 leaves classified, and
+stage 2 fits the layout from what stage 1 produced.
 
 ---
 
