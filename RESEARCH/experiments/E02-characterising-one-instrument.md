@@ -96,3 +96,47 @@ The planting was done in a separate worktree because three readers were reading 
 the time. An earlier batch had been corrected mid-read and one reader reported that four of its
 findings described files that no longer existed in that form. Nothing was lost, by luck. A
 harness that mutates the artifact must not share a tree with anything reading it.
+
+---
+
+## CORRECTION, made the same day, and it is the more useful half of this file
+
+The precision above is **1.00 on the population it was measured in, and that population was
+the wrong one.** Those five reports came from printed pages 22 to 80 - a range where three
+readers had already been over every page and where sixteen defects had already been found and
+corrected. Running the same gate over the whole book gave forty-three reports, and a sample of
+five of them, chosen across the book and checked by hand against the scan, came back **two
+real and three not**.
+
+So the honest figure on the unread population is nearer 0.4 than 1.0, and E01's own rule was
+the one broken: **a number is a fact about its population.** The five-case sample was not
+small, it was drawn from the wrong urn.
+
+### What the three false ones had in common, and the fix
+
+Every one had an implausible frame: a block margin reported as 0, or as 276 on a page whose
+visible lines all stand at 434. The frame is the modal left edge of the six lines FOLLOWING
+the opening, and those six routinely cross out of the opening's block - into a display, out of
+a proof, into an exercise. **The modal edge of a mixed population is not a margin.**
+
+The repair is to require the frame to be agreed: where fewer than half of the following lines
+share an edge, there is no frame and the page is skipped.
+
+### Two operating points, both measured
+
+| | reports over the book | of five sampled |
+|---|---|---|
+| frame taken from the mode, whatever its spread | 43 | 2 real |
+| frame required to be agreed by half | 17 | (retains p.97, which a reader then confirmed) |
+
+The tightening cost two of the true positives I had checked by hand, printed 189 and 250, both
+real. **So this is not a free improvement and the conclusion at the end of this file was too
+simple.** "Make it cover more, not be more careful" is right about where the effort should go;
+it is wrong if it is read as saying the loose setting was better. The loose setting reports
+three false pages for every two true ones, and a worklist like that is not read.
+
+What both settings share is the real limitation: the frame. An instrument that decides whether
+a line is indented by looking at six lines below it will be wrong whenever those six are not
+its neighbours in the same block. The next version should take the frame from the SOURCE - the
+environment the line is actually in is known exactly - and use the scan only for the plate's
+side. That removes the guess from the half of the comparison where the answer is already known.
