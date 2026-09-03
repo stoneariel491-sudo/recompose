@@ -28,6 +28,21 @@ They differ in whether something on the page had already drawn the reader's atte
 
 ---
 
+## E02 — Characterising one instrument by planting, and what it is worth beside a reader
+
+Sixteen real defects put back into a separate worktree, the book rebuilt, the gate run.
+**Precision 5/5 = 1.00. Recall 3/16 = 0.19.** Both halves of the prediction were wrong and in
+opposite directions: it was expected to be broad and a little noisy, and it is narrow and
+exact. It judged 14 pages of 59 and skipped 40, and every skip is an admission.
+
+It is worth keeping anyway, for the reason the whole design rests on: **it recovered two
+defects that six reader-passes over those same pages had missed.** Blind spots that do not
+coincide are worth more than either instrument's accuracy. An instrument with recall 0.19 and
+precision 1.00 should be made to cover more, not to be more careful.
+
+[experiments/E02-characterising-one-instrument.md](experiments/E02-characterising-one-instrument.md)
+---
+
 ## Open, in the order they are worth attacking
 
 **Q1. The instrument matrix.** For each defect class, the measured recall of each instrument and
