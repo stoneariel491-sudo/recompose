@@ -43,6 +43,27 @@ precision 1.00 should be made to cover more, not to be more careful.
 [experiments/E02-characterising-one-instrument.md](experiments/E02-characterising-one-instrument.md)
 ---
 
+## E03 — Counting indented paragraphs per page: designed, built, REFUTED
+
+An instrument to cover the nine-in-fifteen defects that page openings miss. It counts, per
+page, how many paragraphs the scan indents and how many the book does, on the argument that a
+count needs no correspondence between the two.
+
+**It does not measure what it names.** Ground truth on one page, established by two readers
+against a second printing, is three indents too many and two too few - our page should carry
+one MORE than the plate. The instrument reports five fewer.
+
+The count is dominated by rows that are not paragraphs, and the two sides accumulate different
+amounts of that because they break lines differently - the very difference the count was meant
+to be immune to. **A count is only correspondence-free if the things counted are identified
+reliably.** Dropping the correspondence hid the identification problem rather than removing it.
+
+Four real faults were found in the building and two of them are general: a deskew for a tilt of
+twenty points per thousand, and the merging of PDF line fragments into typographic lines.
+
+[experiments/E03-a-refuted-instrument.md](experiments/E03-a-refuted-instrument.md)
+---
+
 ## Open, in the order they are worth attacking
 
 **Q1. The instrument matrix.** For each defect class, the measured recall of each instrument and
