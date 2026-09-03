@@ -185,9 +185,20 @@ def _page_of(path):
     return int(os.path.basename(path)[1:-4])
 
 
-def _runner(script, ranged=True):
+def _runner(script, args=()):
+    """Run one instrument AS IT IS ACTUALLY USED, which is not the same as running it bare.
+
+    THE FIRST MATRIX SCORED para_census.py ZERO ON ITS OWN TWO CLASSES, and the fault was here.
+    Invoked with no arguments it prints the class TOTALS and no per-page rows, so nothing in its
+    output could name the planted page; invoked with a page range it prints the rows the harness
+    was looking for. The instrument was working and the harness was asking it the wrong way.
+
+    **A harness that measures an instrument must invoke it the way the work invokes it.** That is
+    the first thing this matrix taught, and it taught it about itself, which is the cheapest
+    possible place to learn it.
+    """
     def run(root):
-        cmd = [sys.executable, os.path.join(root, "tools", script)]
+        cmd = [sys.executable, os.path.join(root, "tools", script)] + [str(a) for a in args]
         r = subprocess.run(cmd, capture_output=True, text=True, cwd=root,
                            encoding="utf-8", errors="replace", timeout=600)
         return (r.stdout or "") + (r.stderr or "")
@@ -202,8 +213,8 @@ def _names_page(out, path, line):
 
 
 INSTRUMENTS = [
-    Instrument("para_census", _runner("para_census.py"), _names_page),
-    Instrument("header_vs_body", _runner("header_vs_body.py"), _names_page),
+    Instrument("para_census", _runner("para_census.py", (1, 338)), _names_page),
+    Instrument("header_vs_body", _runner("header_vs_body.py", (1, 338)), _names_page),
     Instrument("eqnumbers", _runner("eqnumbers.py"), _names_page),
     Instrument("record_check", _runner("record_check.py"), _names_page),
     Instrument("limits_scope", _runner("limits_scope.py"), _names_page),

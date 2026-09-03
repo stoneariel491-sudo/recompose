@@ -60,16 +60,26 @@ class Defect:
 
 
 class Instrument:
-    """One instrument, and a way to ask whether it reported a given place.
+    """One instrument, and a way to ask whether the plant made it SAY SOMETHING NEW.
 
     `run(root)` returns the instrument's output as text. `reports(output, file, line)` decides
-    whether that output names the place - which is deliberately the instrument's own idea of a
-    place, since a tool that reports a page and a tool that reports a line are both useful and
-    neither should be forced into the other's shape.
+    whether that output names the place - the instrument's own idea of a place, since a tool
+    that reports a page and one that reports a line are both useful and neither should be
+    forced into the other's shape.
 
-    A HIT IS NOT A PASS. An instrument that reports every page reports every plant and scores a
-    perfect recall while being worthless; that is why precision has to be measured separately
-    and why this file says so twice.
+    BUT NAMING THE PLACE IS NOT ENOUGH, AND THE FIRST RUN OF THIS HARNESS PROVED IT. Asked
+    whether it had named the planted page, `para_census` scored a perfect row on all six classes
+    - including two that are not its classes at all and one, LOST-EMPHASIS, that it has no
+    machinery to see. It lists about fifteen hundred candidate rows over the book, so every page
+    is named in every run and every plant looks like a hit.
+
+    **The test is a DIFFERENCE, not a mention.** Each instrument is run once on the clean copy
+    and its output kept; a plant counts only if it produces a line the clean run did not have.
+    That is what "the instrument saw it" has to mean, and it is exactly the correction the layout
+    fitter needed a level down - measure the change, not the state.
+
+    It also makes the harness honest about a tool that says nothing useful loudly: a census with
+    a thousand standing rows gets no credit for a row it was already printing.
     """
 
     def __init__(self, name, run, reports):
@@ -95,8 +105,23 @@ def copy_corpus(src, dst, include):
             shutil.copy2(s, d)
 
 
+def baseline(cfg):
+    """Each instrument's output on the corpus AS IT STANDS, so a plant can be a difference."""
+    with tempfile.TemporaryDirectory(prefix="plant-base-") as tmp:
+        copy_corpus(cfg.ROOT, tmp, cfg.INCLUDE)
+        out = {}
+        for inst in cfg.INSTRUMENTS:
+            try:
+                out[inst.name] = set(inst.run(tmp).splitlines())
+            except Exception as e:                            # noqa: BLE001
+                out[inst.name] = set()
+                print("  baseline for {} failed: {}".format(inst.name, e))
+        return out
+
+
 def matrix(cfg, only=None):
     """The recall matrix: {(defect, instrument): (hits, plants)}, plus what could not plant."""
+    base = baseline(cfg)
     results, unplantable, detail = {}, [], []
     for d in cfg.DEFECTS:
         if only and d.name != only:
@@ -113,7 +138,11 @@ def matrix(cfg, only=None):
                         out = inst.run(tmp)
                     except Exception as e:                    # noqa: BLE001
                         out = "INSTRUMENT FAILED: {}".format(e)
-                    hit = any(inst.reports(out, f, ln) for f, ln in where)
+                    # ONLY WHAT IS NEW. A line the instrument was already printing before the
+                    # plant is not evidence that it saw the plant.
+                    fresh = "\n".join(l for l in out.splitlines()
+                                      if l not in base.get(inst.name, ()))
+                    hit = any(inst.reports(fresh, f, ln) for f, ln in where)
                     key = (d.name, inst.name)
                     h, n = results.get(key, (0, 0))
                     results[key] = (h + int(hit), n + 1)
