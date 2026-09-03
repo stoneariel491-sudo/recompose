@@ -95,7 +95,7 @@ predicted to catch a structural defect the aided reader misses.
 
 ---
 
-## E06 — A layout's continuous parameters fit from the ink. Its indent quantum does not, yet
+## E06 — A book's layout fits from its own ink, once identification and measurement are separated
 
 Q2, answered in part. On thirty leaves chosen by ink fraction alone — no page numbers, no trim,
 no answer — the measure fits to **1.2 %**, the baseline pitch to **0.1 %**, the text block comes
@@ -126,12 +126,14 @@ the residual after all of them. Recall is measured by planting; independence by 
 and seeing which instruments fail together. E01 is the first row of one column. This is the
 claim the whole thing rests on and it is mostly unmeasured.
 
-**Q2. Can a page layout be fitted rather than chosen? ANSWERED IN PART — E06.** The continuous
-parameters fit from the leaves alone to about one per cent. The discrete one, the indent quantum,
-comes out 15 per cent low against a named obstacle of measured size: the side bearing, which is a
-quarter of the quantum here. What remains is not a better clustering but a different measurement
-— the quantum recovered from pairs of lines inside one paragraph, where both edges' glyphs are
-known, rather than from margins.
+**Q2. Can a page layout be fitted rather than chosen? ANSWERED — E06.** Measure, margins,
+baseline pitch, text block and indent quantum all fit from the leaves alone, given no page
+numbers, no trim and no answer, to within about two per cent. Stage 2 can run without a person.
+The quantum took two attempts and the second is the general lesson: **the measurement and the
+identification must not come from the same evidence.** Recovering it from left edges asks them
+to say which lines are openings *and* how far they are indented, and the side bearing corrupts
+both. The right edge identifies a paragraph — a short line ends one, the next begins one — and
+knows nothing about indents, after which the bearing is unbiased noise that a mean removes.
 
 **Q3. Where does attention go, and can it be aimed? UNDER TEST — E05.** E01's secondary finding
 says the marginal return is in telling a reader where to look. Twelve readers are in flight with

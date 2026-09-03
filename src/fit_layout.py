@@ -237,6 +237,77 @@ def fit_quantum(leaves, left_edge):
     return best[0], len(best[1]), total, floor
 
 
+def fit_quantum_by_paragraph(leaves, measure):
+    """The indent quantum, taken from paragraphs identified by their RIGHT edge.
+
+    E06 FAILED THIS QUANTITY AND NAMED THE NEXT MOVE. Recovering the quantum from a histogram of
+    left edges asks the left edge to do two jobs at once - to say which lines are paragraph
+    openings and to say how far they are indented - and the side bearing, a quarter of the
+    quantum here, corrupts both. The obstacle is not the clustering. It is that the measurement
+    and the identification came from the same evidence.
+
+    THE RIGHT EDGE IDENTIFIES A PARAGRAPH AND KNOWS NOTHING ABOUT INDENTS. The body is set
+    justified, so every line but a paragraph's last reaches the measure; a line that falls short
+    ENDS a paragraph, and the line after it BEGINS one. That is a hard signal, it is independent
+    of the quantity being measured, and it costs nothing.
+
+    THEN THE SIDE BEARING AVERAGES AWAY INSTEAD OF BEING FILTERED. Each pair contributes the
+    opening's edge less its own paragraph's margin, and both edges carry a side bearing drawn
+    from the same distribution of initial glyphs. The difference is unbiased; only its variance
+    is inflated. Over many pairs the standard error falls as the square root, so what is a
+    hopeless quarter-quantum on one paragraph is a small fraction of one over two hundred.
+
+    A MEAN IS USED AND NOT A MODE, deliberately, for the same reason: a mode of a noisy quantity
+    keeps the noise, an average of an unbiased one removes it.
+    """
+    import numpy as np
+    SHORT = 0.85          # of the measure: a line this short ends a paragraph
+    pairs = []
+    for _, rows, H, W in leaves:
+        body = running_head(rows, H)
+        if len(body) < MIN_LINES:
+            continue
+        xs = [l for _, _, l, _ in body]
+        ys = [(t + b) / 2 for t, b, _, _ in body]
+        flat = deskew(xs, ys)
+        widths = [(r - l) / W for _, _, l, r in body]
+        for i in range(1, len(body) - 2):
+            if widths[i - 1] >= SHORT * measure:
+                continue                      # the line before was not a paragraph's last
+            if widths[i] < SHORT * measure:
+                continue                      # a one-line paragraph says nothing about a margin
+            rest = [flat[j] for j in range(i + 1, min(i + 4, len(body)))
+                    if widths[j] >= 0.35 * measure]
+            if len(rest) < 2:
+                continue                      # no margin to measure the opening against
+            pairs.append((flat[i] - float(np.median(rest))) / W)
+    if len(pairs) < 20:
+        return None
+    a = np.asarray(pairs)
+    # THE POPULATION IS SEVERAL POPULATIONS AND A THRESHOLD CANNOT SEPARATE THEM. Some openings
+    # the right edge finds are flush by design - the line after a display, the first line of a
+    # block - and the histogram of differences on the case study is plainly multi-modal: a mass
+    # at zero, a second around a third of a quantum, and the indent itself. A first version kept
+    # everything above half the median positive difference and pulled the second mass in with
+    # the third, reading the quantum 15 per cent low. The clusters have to be found, not cut.
+    pos = a[a > 0]
+    if len(pos) < 10:
+        return None
+    step = 0.01
+    hist = {}
+    for v in pos:
+        hist.setdefault(int(v / step), []).append(v)
+    top = max(len(v) for v in hist.values())
+    # THE INDENT IS THE HIGHEST WELL-POPULATED CLUSTER, not the largest one. A book's paragraphs
+    # open flush more often than they indent - after every display, at the head of every block -
+    # so the mass at zero can outweigh the quantum and the mode is the wrong statistic.
+    peak = max(k for k, v in hist.items() if len(v) >= 0.25 * top)
+    near = pos[np.abs(pos - (peak + 0.5) * step) <= step]
+    if len(near) < 10:
+        return None
+    return float(np.mean(near)), len(near), len(pairs)
+
+
 def main(argv):
     d = next((a for a in argv if not a.startswith("-")), None)
     if not d or not os.path.isdir(d):
@@ -285,6 +356,12 @@ def main(argv):
         print(f"                             on {q[1]} leaves of {len(leaves)}, above a side-bearing floor of {q[3]:.4f}")
     else:
         print("    indent quantum           NOT RECOVERED")
+    q2 = fit_quantum_by_paragraph(leaves, m[2])
+    if q2:
+        print(f"    quantum, by paragraph    {q2[0]:.4f}   of the leaf's width"
+              f"   ({q2[0] / m[2]:.4f} of the measure)")
+        print(f"                             from {q2[1]} indented openings of {q2[2]} found"
+              f" by the right edge")
     print("\n  Fractions of the leaf. Points need the trim, and the trim is not in the ink.")
     return 0
 

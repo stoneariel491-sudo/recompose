@@ -175,3 +175,65 @@ and 15 per cent low, and it now has a named obstacle with a measured size rather
 The next move is not a better clustering. It is to stop recovering the quantum from margins at
 all and recover it from *pairs of lines within one paragraph*, where the difference is between
 two edges whose glyphs are both known.
+
+---
+
+# Continuation: the quantum, by the move this document named
+
+The result above closed with a sentence about what to do next: *"stop recovering the quantum from
+margins at all and recover it from pairs of lines within one paragraph, where the difference is
+between two edges whose glyphs are both known."* That was written before it was tried. It works.
+
+    quantum, by paragraph    0.0598 of the leaf's width   (0.0727 of the measure)
+                             from 42 indented openings of 159 found by the right edge
+
+**0.0727 against a true 0.0714 — 1.8 per cent.** Prediction 3 asked for 5 per cent and the
+margin histogram missed it by 15. The same leaves, the same primitives, the same sample.
+
+## Why it works, and it is one idea
+
+**The measurement and the identification must not come from the same evidence.** Recovering the
+quantum from a histogram of left edges asks the left edge to say which lines are paragraph
+openings *and* how far they are indented. The side bearing corrupts both jobs at once, and no
+amount of clustering separates a signal from the noise that defined it.
+
+The right edge answers the first question and knows nothing about the second. **The body is set
+justified, so every line but a paragraph's last reaches the measure: a short line ENDS a
+paragraph and the line after it BEGINS one.** That identification is free, it is hard, and it is
+independent of the quantity being measured.
+
+Then the side bearing stops being an obstacle and becomes noise. Each pair contributes the
+opening's edge less its own paragraph's margin, and both carry a bearing drawn from the same
+distribution of initial glyphs — so the difference is *unbiased* and only its variance is
+inflated. **What is a hopeless quarter-quantum on one paragraph is a small fraction of one over
+forty.** A mean removes it; the mode that the histogram method needed would have kept it.
+
+## The estimator still had to be right, and its first version was not
+
+The first paragraph-based version returned 0.0615 of the measure — 14 per cent low, barely better
+than the histogram. The difference was not the idea but the statistic: it kept every positive
+difference above half the median and averaged those.
+
+The histogram of the 159 differences says why, and it should have been looked at first:
+
+    -0.04  ######                          6
+    -0.03  ######                          6
+    -0.02  ####                            4
+    -0.01  ###############################  31
+    +0.00  ####################            20
+    +0.01  #                               1
+    +0.02  #################               17
+    +0.03  ######                          6
+    +0.04  #                               1
+    +0.05  ##############################  30
+    +0.06  ################                16
+
+**Three populations, not two.** A mass at zero, which is every paragraph the book opens flush — after a display, at the head of a block. The indent itself at 0.05 to 0.07. And a third mass at 0.02 to 0.03, twenty-three of them, which a threshold at half the median swept in with the indents and which pulled the mean down by a seventh.
+
+A threshold cannot separate three populations. The clusters have to be found. Taking the *highest* well-populated cluster rather than the largest one matters too: **a book opens more paragraphs flush than indented**, so the mass at zero outweighs the quantum and the mode is the wrong statistic.
+
+## Q2, now
+
+**Answered.** A book's layout — measure, margins, baseline pitch, text block, indent quantum — can be fitted from its own scanned leaves, given no page numbers, no trim and no answer, to within about two per cent on every parameter. Stage 2 can run without a person.
+
+What it cannot recover is the trim, and it should stop being asked to: a leaf of ink says nothing about the paper it was cut from. Everything is a ratio until the trim enters from outside.
