@@ -80,16 +80,23 @@ already known to be part wrong has nowhere for one more wrong entry to show up.
 
 ---
 
-## E05 — Does directing a reader's attention raise recall? IN FLIGHT
+## E05 — Directing a reader's attention does not raise recall. It subtracts breadth.
 
-E01's secondary finding said the next unit of effort belongs in directing attention rather than
-in adding a reader. There is now something to direct it with. Twelve readers over printed pages
-142 to 173; one of the three on each block is given that block's census rows and the other two
-are not, so the wave is a normal wave whatever the experiment shows.
+Twelve readers over printed pages 142 to 173, one of every three given a census of places worth
+measuring. **The aided reader found the same structural defects as the blind ones on every block
+and fewer of everything else.** On one block all twelve census rows were cleared by the plate
+while nine real structural defects stood on those same eight pages, by a mechanism the census is
+blind to by construction — a paragraph break that is MISSING, invisible to an instrument that
+enumerates blank lines. The blind readers found a mathematically false sentence, a correction of
+the author's prose sitting in the book with no record at all, and a record written backwards; the
+aided reader found none of those three.
 
-Four predictions fixed before the first reader was launched, including the specific risk: **a
-reader that trusts a list of mechanisms inherits that list's blind spots**, so the blind pair is
-predicted to catch a structural defect the aided reader misses.
+E01 concluded the next unit of effort belongs in directing attention. **On this evidence that is
+wrong**, and the reason matters more than the correction: a census is a COMPLETENESS device and a
+reader is a DISCOVERY device. Giving one to the other converts discovery into checking, at a
+straight loss. Run them against each other instead — and when readers find what the census did
+not report, that gap is the specification for the next class, which is how three of its six
+classes were obtained.
 
 [experiments/E05-directing-attention.md](experiments/E05-directing-attention.md)
 

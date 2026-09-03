@@ -55,3 +55,80 @@ usual way, against the plate and the second printing rather than by vote.
 
 Results are recorded below when the wave closes. Nothing above may be edited after the readers
 were launched; a correction, if one is needed, goes in a CORRECTION section as E02 has.
+
+---
+
+# Result
+
+Twelve readers over printed pages 142 to 173, four blocks of eight, three readers each. On each
+block the reader labelled C was given that block's census rows; A and B were not and were not
+told the census existed. All four blocks closed with the readers agreeing on every structural
+finding.
+
+| block | structural defects found by A (blind) | by B (blind) | by C (aided) | census rows |
+|---|---|---|---|---|
+| 142–149 | 9 | 10 | 9 | 12 |
+| 150–157 | 3 | 2 | 2 | 3 |
+| 158–165 | 5 | 5 | 5 | 8 |
+| 166–173 | 9 | 9 | 9 | 12 |
+
+| prediction | outcome |
+|---|---|
+| 1. the aided reader finds MORE structural defects | **refuted.** It found the same set on every block, and one fewer on 142–149 |
+| 2. the aided reader finds FEWER non-structural findings | **held, and by a wide margin** |
+| 3. the blind pair catches a structural defect the aided reader misses | **held on 142–149 and 166–173** |
+| 4. no difference where the census is nearly empty (150–157) | **held** — 3, 2, 2 |
+
+## What actually happened
+
+**Directing attention did not add recall. It subtracted breadth.**
+
+On 142–149 the blind readers found, between them, a page that was mathematically false — our
+plate reads "*f* is continuous at *x*" where the second printing reads "at **a limit point** *x*",
+without which the sentence is untrue at every isolated point — plus four wrong claims in our own
+page headers and a paragraph indented to three-fifths of a quantum in both printings. The aided
+reader found one header claim and the sub-quantum indent, and did not find the false sentence.
+
+On 158–165 the blind pair found that a correction of Rudin's own prose sat in the book with **no
+entry in ERRATA at all**, against a page header asserting it was recorded; that a third damaged
+comma existed where the record counted two; and that the record of a page-161 decision was
+written **backwards**. The aided reader found the backwards record and the third comma but not
+the missing entry.
+
+On 166–173, both blind readers and the aided reader found the same nine — and the aided reader
+wrote the sentence that settles this experiment: *"The census saw none of the twelve findings
+above, because eleven of them arrive through mechanisms it does not cover."* **Every one of the
+twelve census rows on that block was cleared by the plate, while nine real structural defects
+stood on the same eight pages.**
+
+## The mechanism the census could not have
+
+Those nine arrive by a fault the census is blind to *by construction*: the source runs text on
+after a display with **no** blank line, where the plate opens an indented paragraph. An instrument
+that enumerates blank lines after displays cannot see a blank line that is absent. It is now a
+sixth class, RUN-ON, counted at sixty places in the book — found by reading what the tool did not
+report, which is the third time in this project that a class has been found that way.
+
+## What this changes
+
+E01 concluded that the next unit of effort belongs in directing attention rather than in adding a
+reader. **On this evidence that is wrong, and the reason is worth more than the correction.**
+
+A census is not an attention aid. It is a *completeness* device: it enumerates a finite population
+over the whole book, which no reader can do, and it hands over a list that can be checked to
+exhaustion. A reader is a *discovery* device: it finds the class nobody has named yet, which no
+census can do, because a census can only count the mechanisms someone has already thought of.
+
+Giving the census to a reader converts a discovery device into a checking device — and the
+measurements above say the conversion is a straight loss, because the same structural defects
+were found without it while everything outside its five classes went unfound.
+
+**So the two should not be combined; they should be run against each other.** The census produces
+a population and clears or condemns it mechanically, page by page. The readers stay blind and
+keep doing the thing only they do. And when readers find defects the census did not report — as
+they did on printed page 173 — that gap is not a reader's win, it is **the specification for the
+next class**, which is exactly how RUN-ON, SUPPRESSED-JOIN and PARTS-FIRST were all obtained.
+
+The instrument matrix (Q1) gains its second measured row, and it is a row about *coverage* rather
+than accuracy: the census's recall is 16 of 16 within its classes and 0 of 9 outside them, on the
+same wave.
