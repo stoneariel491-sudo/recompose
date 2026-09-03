@@ -174,6 +174,25 @@ one of every three given a census of places worth measuring, and the predictions
 cost, and which of them fall away with scale rather than repeating per book? A method that is
 only affordable once is a demonstration, not a product.
 
+**Q6. Does the automation agree with a person? FIRST LAW — E08.** For months this was not
+asked, because "does the instrument run" and "does the instrument agree with a reader" were treated
+as one question. They are not. The first time a sweep and a human reading landed on the same line
+independently, the cause was identifiable: **both measured the same physical difference in the same
+frame, and neither used anything else.** Every instrument that has never agreed substitutes a
+representation the reader never touches — a compilation of the source in isolation, a statistical
+rule with count floors, a markup environment stack, a positional index.
+
+The design rule that follows is testable before a line is written: *state what the instrument
+measures as a sentence a person could execute against the page with a ruler.* If you cannot, it
+measures a model of the page.
+
+Used deliberately once since: a check that "could never have failed" was restated as *break it on
+purpose and see whether the prover notices*, and the resulting mutation test reproduced the
+reader's two findings exactly before finding seven more. **A gate that cannot fail prints the same
+word as one that can**, and there had been no way to tell them apart but by hand.
+
+Three predictions are fixed in E08 against evidence that has not arrived.
+
 **Q5. Verification of a generative transcriber.** If a model transcribes a page, it is a fourth
 reader and not a source. What does the apparatus have to add before its output can enter at all,
 and what is the measured recall of the gates against *its* characteristic failures, which are
