@@ -77,3 +77,101 @@ above, which the fitter is not given.
 
 Results below when the run is done. Nothing above may be edited after the fitter is first run;
 a correction goes in a CORRECTION section, as E02 has.
+
+---
+
+# Result
+
+    fitted on 30 leaves chosen by ink fraction alone, 2691 px wide
+      leaf aspect              1.5087
+      left margin              0.0902   of the leaf's width
+      measure                  0.8236   of the leaf's width
+      right margin             0.0861   of the leaf's width
+      baseline pitch           0.0197   of the leaf's height
+      text block, top          0.0931   of the leaf's height
+      text block, height       0.8224   of the leaf's height
+      indent quantum           0.0500   of the leaf's width   (0.0607 of the measure)
+                               on 21 leaves of 30, above a side-bearing floor of 0.0179
+
+| prediction | outcome |
+|---|---|
+| 1. measure within 1 % | **just outside** — 0.8236 against 0.8333, 1.2 % low |
+| 2. pitch within 2 % | **held, at 0.1 %** — and see below, because the target moved |
+| 3. quantum within 5 % | **failed** — 0.0607 of the measure against 0.0714, 15 % low |
+| 4. block height fails, and short | **held** — 1.3 % short |
+| 5. count of margins per page | **not tested.** It was not implemented and is not claimed |
+
+**The grammar's continuous parameters fit. Its discrete one does not, yet.** That is the narrower
+result E06 named in advance as the likely one, and it says where a person is still needed: not
+in measuring the page, but in deciding what an indent is.
+
+## The measurement that corrected the answer instead of matching it
+
+Prediction 2 was checked against a recorded baseline pitch of 13.87 pt — 10 pt on 13, times the
+book's linespread of 1.0667. The fitter returned the equivalent of 12.18 pt and was 12 per cent
+out, so the fitter was assumed wrong and the estimator was rebuilt.
+
+Then the built book itself was measured. **Its baseline steps are 12.7 to 12.8 pt.** The recorded
+13.87 was arithmetic on the wrong quantity; the composed page never had that pitch. Against the
+book's real pitch of 12.75 pt over a 648 pt leaf — 0.01968 — the fitter's 0.0197 is right to a
+tenth of a per cent, and was right before the estimator was touched.
+
+**An experiment whose ground truth is a number someone wrote down is testing the note.** The
+plate and the built page are evidence; a table in a document is a claim, and this one was false.
+The estimator was rebuilt anyway, on its own merits — a truncated median is biased low by
+construction — but the rebuild was done for the wrong reason and would have been abandoned had
+the check come first.
+
+## Three faults, and two of them are general
+
+**Within a leaf first, across leaves second.** The first version pooled every line of every leaf
+and took one pair of percentiles for the measure. It returned 0.8785 — *wider than the justified
+span of any single leaf in the sample*, which was the tell. The leaves are not registered: their
+body margins vary by sixty pixels across thirty leaves while their justified spans agree to one
+per cent. **Pooling positions from unregistered leaves measures the union of their text blocks
+and calls it the block.** The same fault, unnoticed, made the text block 0.5 per cent too *long*
+where a page's ink — ending at its last line — should have made it short: two errors of opposite
+sign nearly cancelling, which is the worst way for a number to be right. Corrected, the block
+comes out 1.3 per cent short, as predicted.
+
+A layout parameter that is a DIFFERENCE — a measure, a quantum, a pitch — is a within-leaf
+quantity and must be computed inside a leaf before anything is pooled. Only a POSITION needs
+registration, and a position is what this stage cannot recover.
+
+**The left ink edge is not the margin.** It is the margin plus the first glyph's left side
+bearing, and a T, an x, an L and a u flush at one margin land at four different ink edges. The
+first quantum fit returned 0.010 of the leaf against a true 0.063 — it had found the spacing
+between neighbouring clusters, which is side-bearing noise. Measured rather than assumed, from
+the spread of ink edges within a leaf's densest cluster of line starts, that noise is **1.79 per
+cent of the leaf here, about 48 px, about 7 pt** — a quarter of the quantum it is trying to
+resolve. Below that floor no margin difference recovered from ink can be believed, whatever the
+tolerance passed to the clustering.
+
+Two readers met the same fact independently on one page of the case study, where four lines of a
+proof measured below a range a header claimed for it, on the side bearings of x, u, L and T.
+
+## What this says about the architecture
+
+Stage 2's own document says measurements are taken *"as fractions of the leaf so that scan
+resolution cancels"*. **Resolution cancels. Registration and crop do not.** These plates are 2691
+× 4060 px at an aspect of 1.5087 against a 6 × 9 trim's 1.5000, they are cropped inside the trim
+by about one per cent of the width, and each leaf sits at its own offset. A fraction of the leaf
+is therefore not the invariant the document claims it is: it is invariant to the scanner's dpi
+and to nothing else about the scanner.
+
+The quantity that IS invariant is a ratio between two measurements on the same leaf — the
+quantum as a fraction of the measure, the pitch as a fraction of the block height. Those are what
+stage 2 should emit, and what a later stage can turn into points once the trim is known from
+outside the ink.
+
+## Where this leaves Q2
+
+Answered in part, and the part matters: **the continuous parameters of a book's layout can be
+fitted from its own leaves, without being told which measurements to make, to about one per
+cent.** The discrete parameter — the indent quantum, which is what every structural instrument
+in this project has needed and none has recovered — comes out to the right order of magnitude
+and 15 per cent low, and it now has a named obstacle with a measured size rather than a shrug.
+
+The next move is not a better clustering. It is to stop recovering the quantum from margins at
+all and recover it from *pairs of lines within one paragraph*, where the difference is between
+two edges whose glyphs are both known.
