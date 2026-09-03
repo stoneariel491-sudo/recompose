@@ -80,8 +80,9 @@ def pdf_lines(doc, tol=4.0, marker=None):
     only reliable way to slice a rendered book back into the source's pages when the pagination
     has drifted.
     """
-    rows, marks = {}, []
+    out, marks = [], []
     for i in range(doc.page_count):
+        frags = []
         for block in doc[i].get_text("dict")["blocks"]:
             for line in block.get("lines", []):
                 text = "".join(s["text"] for s in line.get("spans", [])).strip()
@@ -93,11 +94,28 @@ def pdf_lines(doc, tol=4.0, marker=None):
                     if m:
                         marks.append((i, y0, m))
                         continue
-                key = (i, round(y0 / tol) * tol)
-                cur = rows.get(key)
-                if cur is None or x0 < cur[1]:
-                    rows[key] = (y0, x0, text)
-    out = sorted((k[0], v[0], v[1], v[2]) for k, v in rows.items())
+                frags.append((y0, x0, text))
+        # GROUPED BY THE GAP, NOT BY A BUCKET. Rounding y to a multiple of `tol` merges what
+        # falls in one bucket, which is not what "within tol of one another" means: two
+        # fragments two points apart straddling a bucket edge come back as two lines. On the
+        # constructed page that found this, a sign at y=102 sat between its own line's 100 and
+        # 101.5 and was split off from both. The anchor is the group's FIRST fragment rather
+        # than its last, so a run of fragments each just under tol apart cannot chain into one
+        # line of unbounded height.
+        frags.sort()
+        groups = []
+        for y0, x0, text in frags:
+            if groups and y0 - groups[-1][0] <= tol:
+                groups[-1][1].append((x0, text))
+            else:
+                groups.append((y0, [(x0, text)]))
+        for y0, parts in groups:
+            parts.sort()
+            # THE WHOLE LINE'S TEXT, in the order it is set. Keeping only the leftmost
+            # fragment returns a line whose text is a fraction's numerator, and the use this
+            # primitive was built for is locating a paragraph by the words it opens with.
+            out.append((i, y0, parts[0][0], " ".join(t for _, t in parts)))
+    out.sort()
     return (out, sorted(marks)) if marker is not None else out
 
 
@@ -133,6 +151,13 @@ def local_frame(lefts, following=6, tol=None, agreement=0.5):
     tail = lefts[1:1 + following] or lefts[:1]
     hist = Counter(round(x / tol) * tol for x in tail)
     best = max(hist.values())
-    if best < agreement * len(tail):
+    # STRICTLY MORE THAN `agreement`, AND THE BOUNDARY IS THE WHOLE CASE. The first version of
+    # this test read `best < agreement * len(tail)`, which accepts an exact tie - and an exact
+    # tie is not a near miss here, it is the failure the test was written for. The page that
+    # motivated it splits six following lines into three at the body margin and three inside a
+    # block; that is 3 against a threshold of 3, the guard let it through, and min() then
+    # returned the body margin for a line that belonged to the block. Found by a unit test on a
+    # constructed page, not on a real one, which is the argument for constructing them.
+    if best <= agreement * len(tail):
         return None
     return min(x for x, n in hist.items() if n == best)
