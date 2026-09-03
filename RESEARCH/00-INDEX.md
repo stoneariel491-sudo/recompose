@@ -126,12 +126,36 @@ quantum it is trying to resolve.
 
 ---
 
+## E07 — The instrument matrix, measured at last, and what it says is uncomfortable
+
+Q1, mechanically, for the first time. Six defect classes planted one at a time against the five
+instruments that read the source.
+
+**A reversed inequality in the body is essentially uncovered** — one instrument catches one plant
+in five and no other sees it at all. The class with the worst consequences has the weakest
+mechanical cover in the project. **A wrong number in a CHECK line is caught one time in three**,
+by the mechanism written specifically to catch it.
+
+The harness learned two things about itself before it could measure anything, and both generalise.
+**It must invoke an instrument the way the work invokes it** — invoked bare, the census prints
+totals and no rows, and scored zero on its own classes. **And a hit is a difference, not a
+mention** — the census names every page in every run, so on a mention test it scored perfectly on
+six classes including two that are not its own. Each instrument is now run on the clean corpus
+first and a plant counts only if it produces a line that was not there before: *measure the
+change, not the state*, which is the same correction the layout fitter needed a level down.
+
+[experiments/E07-the-instrument-matrix.md](experiments/E07-the-instrument-matrix.md)
+
+---
+
 ## Open, in the order they are worth attacking
 
-**Q1. The instrument matrix.** For each defect class, the measured recall of each instrument and
-the residual after all of them. Recall is measured by planting; independence by planting once
-and seeing which instruments fail together. E01 is the first row of one column. This is the
-claim the whole thing rests on and it is mostly unmeasured.
+**Q1. The instrument matrix. FIRST TABLE MEASURED — E07.** Six classes against the five
+source-reading instruments, planted mechanically. Two results stand out: a reversed inequality is
+essentially uncovered, and a wrong number in a CHECK line is caught one time in three. What
+remains unmeasured is precision, the instruments that read the plate (they cannot run in a
+temporary copy), and correlation — for which the per-plant record is kept but six trials a class
+is far too few.
 
 **Q2. Can a page layout be fitted rather than chosen? ANSWERED — E06.** Measure, margins,
 baseline pitch, text block and indent quantum all fit from the leaves alone, given no page
