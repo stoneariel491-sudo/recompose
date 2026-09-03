@@ -1,57 +1,65 @@
-"""The local frame: what a line's position is measured AGAINST, on a page that has no origin.
+"""Where a line stands, on a page that has no origin — and the four rules that were wrong first.
 
 WHY THIS IS A PRIMITIVE AND NOT A DETAIL. Every question this pipeline asks about horizontal
 position — is this paragraph indented, is that block set in, does the plate agree with the render —
 is a question about a DIFFERENCE. There is no absolute frame to measure in: scanned leaves are not
 registered to a common origin, and in the case study consecutive leaves sit up to 75 px apart while
-their justified spans agree to one per cent. So the frame has to be built from the page's own lines,
-and everything downstream inherits whatever that construction gets wrong.
+their justified spans agree to one per cent. So the reference has to be built from the page's own
+lines, and everything downstream inherits whatever that construction gets wrong.
 
-Three separate instruments in the case study were refuted by their frame before this was written
-down. The rules below are each the fix for a measured failure, not a precaution.
+THE ANSWER IS NOT TO BUILD A BETTER REFERENCE. It is to stop building one.
 
-    THE FRAME IS THE DENSEST CLUSTER, NEVER THE MINIMUM.
-        A numbered display hangs its number in the OPPOSITE margin - a full indent quantum left of
-        every line of type - so the minimum takes the number for the body rule. Measured: a tail of
-        [443, 608, 446, 287, 604] where 287 is the "(20)" of a display and the body rule is 443-448.
-        The minimum also fails the other way: on a page where a false paragraph HAS been inserted,
-        the tail alternates flush and indented, so minimum-plus-agreement refuses exactly the page
-        the instrument exists to find - [38.0, 61.6, 36.0, 61.6].
+Four versions of this file chose ONE number to call "the frame" and subtracted it from the line
+being measured. Each was refuted by a page where that choice was the wrong level, and the sequence
+is worth keeping because every fix broke the next page:
 
-    A LINE'S LEFT EDGE IS NOT ITS FIRST INK.
-        Where a number hangs in the margin, the row's first ink column is the number. No justified
-        line of prose carries a blank of that width inside it, so **the gap is the discriminator**
-        and no threshold on position is needed - which matters because a position threshold would
-        need the very frame being constructed.
+    min(tail)             captured by a numbered display's hanging number, which sits a full
+                          indent quantum left of every line of type: [443, 608, 446, 287, 604],
+                          where 287 is the "(20)".
 
-    THE WINDOW IS PROSE LINES, NOT LINES.
-        Taking "the prose among the next five rows" and taking "the next five prose rows" differ
-        whenever a display sits under the line in question - which is precisely the situation that
-        CREATES the fault class being hunted. The first refused those pages; the second reads past
-        the display.
+    the DENSEST cluster   refuted on a page whose window held two INDENTED openings and a display
+                          against two flush lines: [595, 579, 413, 413, 580]. The mode is 584.7,
+                          the indent rule, so a line at 411 was measured against it and came out
+                          "flush" — **the right answer for a reason that had nothing to do with
+                          the page.** This version was published as a law in this repository and
+                          refuted three hours later by a human reader.
 
-    THE WINDOW IS SMALL, AND THAT WAS MEASURED RATHER THAN ARGUED.
-        Sweeping it against ground truth established by hand: 5 lines gives 7 right, 7 gives 4,
-        9 gives 3, 11 gives 2. **Widening the frame degrades it monotonically**, because a wider
-        window crosses block boundaries and the agreement test then refuses. Locality is not a
-        preference here; it is the measured optimum.
+    the LEFTMOST cluster  found two defects four other instruments had missed, then called two
+                          settled pages indented by exactly one quantum: their openings sit inside
+                          a proof block while the window also holds page-margin lines a level out.
+                          **The leftmost rule on the leaf is not the rule the line belongs to.**
 
-    A FRAME THAT DOES NOT EXIST IS NOT A FRAME AT ZERO.
-        When the lines do not agree on an edge, the answer is None and the caller must refuse.
-        Returning a best guess is how an instrument acquires a false positive it cannot explain.
+    the RIGHTMOST at or   fixed one of those two and left the other, whose own rule carries a
+    left of the line      single line inside the window, so no cluster forms on it and the search
+                          falls through to the level below — one quantum out, again.
+
+Every one is the same failure. A page in a mathematical book carries THREE rules — equation
+numbers, the proof block, the block's own indent — so **"the frame" is not a property of the leaf**,
+and any rule that picks one number will pick the wrong level on some page.
+
+What the instrument needs is not the frame but the answer, and the answer has exactly two
+admissible values. So `sits` tests both and refuses when neither holds.
+
+A NOTE ON WHY THE CONTROL COULD NOT CATCH THE SECOND VERSION, which is the sharpest thing here.
+Its twelve cases had all been settled by hand and all had the same verdict: the plate runs the line
+on. A frame displaced one quantum to the RIGHT still returns "flush" on every one of them. **A test
+whose cases all share one answer cannot detect an error that preserves that answer** — and the
+third version was caught by that same control only because it erred in the other direction.
 """
 
-MIN_LINES = 3          # below this a "cluster" is a coincidence
-AGREE = 0.6            # of the window that must share an edge for a frame to exist
+MIN_LINES = 3          # below this a window is a coincidence, not evidence
 GAP = 0.06             # of the page width: a blank this wide inside a row is not a word space
 NUMBER = 0.09          # of the page width: how wide a hanging number can be
+NEAR = (0.6, 1.4)      # a line is indented if it stands this many quanta right of a rule
 
 
 def left_edge(cols, width):
-    """Where the line starts, given the sorted ink columns of one row and the page width.
+    """Where the LINE starts, given the sorted ink columns of one row and the page width.
 
-    Returns the first ink column, unless the row opens with a narrow run followed by a wide gap -
-    a number hanging in the margin - in which case it returns the start of what follows the gap.
+    A NUMBERED DISPLAY HANGS ITS NUMBER IN THE OPPOSITE MARGIN, so a row's first ink column is the
+    number and not the line. **No justified line of prose carries a blank of that width inside it**,
+    so the gap is the discriminator — and that matters, because any threshold on POSITION would need
+    the very reference being constructed.
     """
     if len(cols) < 2:
         return int(cols[0]) if len(cols) else None
@@ -61,31 +69,43 @@ def left_edge(cols, width):
     return int(cols[0])
 
 
-def frame(edges, tol):
-    """The edge a window of lines agrees on, or None if they do not agree.
+def sits(window, tol, edge, quantum):
+    """(the line is indented, its offset from the rule it belongs to), or None to refuse.
 
-    `edges` are left edges already restricted to prose lines and to the window; `tol` is how far
-    apart two lines may be and still count as the same rule. The result is the mean of the largest
-    cluster, which is the rule the majority of the window sits on.
+    `window` are the left edges of the nearby lines that could carry a rule; `edge` is the line
+    being measured; `tol` is how far apart two lines may be and still sit on one rule.
+
+        FLUSH     some rule in the window stands level with the line
+        INDENTED  some rule stands one quantum to its left
+        neither   REFUSE
+
+    A single line is enough to witness a rule, because the hypothesis being tested already says
+    where that rule must be. The earlier versions needed a cluster because they were SEARCHING for
+    the frame rather than testing for it, and a search needs support where a test needs only a
+    witness.
+
+    A line both level with one rule and a quantum right of another is reported flush: that is the
+    block-boundary case, and the nearer rule governs.
     """
-    edges = [e for e in edges if e is not None]
-    if len(edges) < MIN_LINES:
+    window = [w for w in window if w is not None]
+    if len(window) < MIN_LINES:
         return None
-    best, size = None, 0
-    for c in edges:
-        n = sum(1 for e in edges if abs(e - c) <= tol)
-        if n > size:
-            best, size = c, n
-    if size < AGREE * len(edges):
-        return None
-    return sum(e for e in edges if abs(e - best) <= tol) / float(size)
+    level = [w for w in window if abs(w - edge) <= tol]
+    if level:
+        base = min(level, key=lambda w: abs(w - edge))
+        return False, edge - base
+    for w in window:
+        if NEAR[0] * quantum <= edge - w <= NEAR[1] * quantum:
+            return True, edge - w
+    return None
 
 
 def window(lines, start, count, is_prose):
     """The next `count` PROSE lines after index `start`, not the prose among the next `count`.
 
-    `lines` is any sequence; `is_prose` decides membership. The distinction is the whole point:
-    a display under the line being measured must be read past, not counted against the budget.
+    The distinction is the whole point: a display under the line being measured must be read past,
+    not counted against the budget — and a display under the line is precisely the situation that
+    CREATES the fault class these instruments hunt.
     """
     out = []
     for i in range(start + 1, len(lines)):

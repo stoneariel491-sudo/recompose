@@ -193,6 +193,22 @@ word as one that can**, and there had been no way to tell them apart but by hand
 
 Three predictions are fixed in E08 against evidence that has not arrived.
 
+**Q7. When does a published law survive? FIRST REFUTATION - E09.** E08's design rule held and its
+worked example did not:  published "the frame is the densest cluster, never the
+minimum" and a human reader refuted it three hours later on a page whose window held more indented
+lines than flush ones. Two further rules followed, each fixing the last and breaking the next, and
+every one was the same failure - a page carries three rules, so **"the frame" is not a property of
+the leaf** and any rule picking one number picks the wrong level somewhere.
+
+The correction is a change of question: the instrument needs the ANSWER, not the frame, and the
+answer has two admissible values, so test both and refuse when neither holds. A single line then
+witnesses a rule, because the hypothesis says where the rule must be - a search needs support where
+a test needs only a witness. Control: 4 right and 8 refused, to 12 right and 0 refused.
+
+And the result that generalises furthest: **a test whose cases all share one answer cannot detect an
+error that preserves that answer.** The control could not catch the refuted version because all
+twelve of its cases had the same verdict.
+
 **Q5. Verification of a generative transcriber.** If a model transcribes a page, it is a fourth
 reader and not a source. What does the apparatus have to add before its output can enter at all,
 and what is the measured recall of the gates against *its* characteristic failures, which are
