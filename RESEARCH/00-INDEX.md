@@ -64,6 +64,61 @@ twenty points per thousand, and the merging of PDF line fragments into typograph
 [experiments/E03-a-refuted-instrument.md](experiments/E03-a-refuted-instrument.md)
 ---
 
+## E04 — Two defects in the surviving primitives, found by constructed pages
+
+The four primitives extracted from E03 had been read carefully and had produced the measurements
+E02 and E03 report. They had never been run on an input whose right answer was known in advance.
+**Two of the four were wrong**, and one of them in exactly the case its own docstring named: the
+agreement test that refuses a frame when the following lines disagree accepted a three-three
+split, which is the very page that motivated writing it.
+
+The prediction going in was that the tests would be regression cover. A component is only tested
+by an input whose answer is known independently of it, and an instrument that reports a worklist
+already known to be part wrong has nowhere for one more wrong entry to show up.
+
+[experiments/E04-two-defects-found-by-construction.md](experiments/E04-two-defects-found-by-construction.md)
+
+---
+
+## E05 — Does directing a reader's attention raise recall? IN FLIGHT
+
+E01's secondary finding said the next unit of effort belongs in directing attention rather than
+in adding a reader. There is now something to direct it with. Twelve readers over printed pages
+142 to 173; one of the three on each block is given that block's census rows and the other two
+are not, so the wave is a normal wave whatever the experiment shows.
+
+Four predictions fixed before the first reader was launched, including the specific risk: **a
+reader that trusts a list of mechanisms inherits that list's blind spots**, so the blind pair is
+predicted to catch a structural defect the aided reader misses.
+
+[experiments/E05-directing-attention.md](experiments/E05-directing-attention.md)
+
+---
+
+## E06 — A layout's continuous parameters fit from the ink. Its indent quantum does not, yet
+
+Q2, answered in part. On thirty leaves chosen by ink fraction alone — no page numbers, no trim,
+no answer — the measure fits to **1.2 %**, the baseline pitch to **0.1 %**, the text block comes
+out **1.3 % short exactly as predicted**, and the indent quantum lands **15 % low**, which fails
+its prediction and is the first time in this project that quantity has been recovered to the
+right order of magnitude at all.
+
+**The pitch check corrected the answer instead of matching it.** Measured against a recorded
+13.87 pt the fitter was 12 % out, so the estimator was rebuilt — and then the built book was
+measured and its baseline steps are 12.7 to 12.8 pt. The fitter had been right to a tenth of a
+per cent all along. *An experiment whose ground truth is a number someone wrote down is testing
+the note.*
+
+Two faults that generalise: **a layout parameter that is a difference must be computed within a
+leaf before anything is pooled** — leaves are not registered, and pooling their positions
+measures the union of their text blocks; and **the left ink edge is not the margin**, it is the
+margin plus a side bearing, whose spread here is 1.79 % of the leaf, about 7 pt, a quarter of the
+quantum it is trying to resolve.
+
+[experiments/E06-fitting-a-layout.md](experiments/E06-fitting-a-layout.md)
+
+---
+
 ## Open, in the order they are worth attacking
 
 **Q1. The instrument matrix.** For each defect class, the measured recall of each instrument and
@@ -71,15 +126,16 @@ the residual after all of them. Recall is measured by planting; independence by 
 and seeing which instruments fail together. E01 is the first row of one column. This is the
 claim the whole thing rests on and it is mostly unmeasured.
 
-**Q2. Can a page layout be fitted rather than chosen?** Stage 2 of the pipeline currently
-measures whatever a person thinks to measure. A book's layout is a small grammar — margins, a
-quantum, a leading, a set of block styles — and fitting a grammar to observations is well posed.
-If it can be fitted, stage 2 becomes automatic and the rest follows.
+**Q2. Can a page layout be fitted rather than chosen? ANSWERED IN PART — E06.** The continuous
+parameters fit from the leaves alone to about one per cent. The discrete one, the indent quantum,
+comes out 15 per cent low against a named obstacle of measured size: the side bearing, which is a
+quarter of the quantum here. What remains is not a better clustering but a different measurement
+— the quantum recovered from pairs of lines inside one paragraph, where both edges' glyphs are
+known, rather than from margins.
 
-**Q3. Where does attention go, and can it be aimed?** E01's secondary finding says the marginal
-return is in telling a reader where to look. One sub-class already has an instrument that does
-this and it found a defect on a page nobody had opened. How far does that generalise, and what
-is the right unit — a line, a paragraph, a page?
+**Q3. Where does attention go, and can it be aimed? UNDER TEST — E05.** E01's secondary finding
+says the marginal return is in telling a reader where to look. Twelve readers are in flight with
+one of every three given a census of places worth measuring, and the predictions are fixed.
 
 **Q4. What is the cost curve?** The case study is expensive per page. Which stages carry the
 cost, and which of them fall away with scale rather than repeating per book? A method that is

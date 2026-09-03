@@ -33,8 +33,30 @@ question with an answer, and the answer is rarely "nothing".**
 
 ## 2. Measure the design
 
-Recover the book's own typography from the ink, as fractions of the leaf so that scan
-resolution cancels.
+Recover the book's own typography from the ink, as **ratios between two measurements on the same
+leaf**.
+
+This used to read "as fractions of the leaf so that scan resolution cancels", and E06 refuted it
+by measuring. **Resolution cancels. Registration and crop do not.** The case study's plates are
+2691 × 4060 px at an aspect of 1.5087 against a 6 × 9 trim's 1.5000, they are cropped inside the
+trim by about one per cent of the width, and every leaf sits at its own offset — body margins
+vary by sixty pixels across thirty leaves while their justified spans agree to one per cent. A
+fraction of the leaf is invariant to the scanner's dpi and to nothing else about the scanner.
+
+Two rules follow, and both were bought with a wrong answer:
+
+  * **Within a leaf first, across leaves second.** A parameter that is a DIFFERENCE — a measure,
+    a quantum, a pitch — is a within-leaf quantity. Pooling positions from unregistered leaves
+    measures the UNION of their text blocks: it gave a measure wider than the justified span of
+    any single leaf in the sample, and a text block half a per cent too *long* where a page's
+    ink, ending at its last line, should have made it short. Two errors of opposite sign nearly
+    cancelling is the worst way for a number to be right.
+  * **The left ink edge is not the margin.** It is the margin plus the first glyph's left side
+    bearing: a T, an x, an L and a u flush at one margin land at four different ink edges.
+    Measured rather than assumed — from the spread within a leaf's densest cluster of line
+    starts — that noise is 1.79 per cent of the leaf in the case study, about 7 pt, **a quarter
+    of the indent quantum it is trying to resolve.** Below that floor no margin difference
+    recovered from ink can be believed, whatever tolerance the clustering is given.
 
 What has to come out: trim, text block, measure, leading, the indent quantum, type size, column
 structure and gutters, head positions, the drop of an opening, footnote geometry.
@@ -52,9 +74,20 @@ and nothing has to be assumed: four leaves gave 266.4 scan pt for a 360 pt measu
 The leaf's own dimensions gave 1.330, out by 1.6 per cent — small until it is multiplied through
 a column width.
 
-*Automated.* Partly. The measurements exist as tools; choosing which to make is still a person.
-**Open question: can the set of measurements be derived from the page rather than chosen? A
-layout is a small grammar, and fitting a grammar is a well-posed problem.**
+*Automated.* **The continuous parameters, yes** — `src/fit_layout.py` takes a directory of leaves,
+chooses body leaves by ink fraction alone, and returns the measure to 1.2 per cent, the baseline
+pitch to 0.1 per cent and the text block to 1.3 per cent, against a case study whose answers were
+established over weeks by other means. It is given no page numbers, no trim and no answer.
+
+**The indent quantum, not yet**: 15 per cent low, which is the first time this project has
+recovered it to the right order of magnitude and is still not good enough to set type by. The
+obstacle is named and measured rather than shrugged at, and the next move is a different
+measurement rather than a better clustering — the quantum taken from pairs of lines inside one
+paragraph, where both edges' glyphs are known, instead of from margins whose glyphs are not.
+
+The trim itself is not recoverable and should stop being asked for: a leaf of ink says nothing
+about the paper it was cut from. It enters from outside, and everything else is a ratio until it
+does.
 
 ---
 
