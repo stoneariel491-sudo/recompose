@@ -6,7 +6,8 @@ misses are not harder to see than the ones it finds.** They differ in whether so
 had already drawn the reader's attention. E01 concluded that the next unit of effort belongs in
 directing attention rather than in adding a reader, and Q3 in the index has stood open since.
 
-There is now something to direct attention *with*. `tools/para_census.py` enumerates every place
+There is now something to direct attention *with*. The case study's census tool,
+`para_census.py`, enumerates every place
 in the source where one of five mechanisms could have decided a paragraph's indent without
 anyone choosing it — 586 openings over the whole book, and between 3 and 12 on a block of eight
 pages. It finds 16 of the 16 structural defects that three readers established over printed

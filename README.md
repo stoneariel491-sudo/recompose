@@ -111,3 +111,10 @@ Honest limits: one book has been processed end to end (the case study). Stages 3
 `DESIGN/ARCHITECTURE.md` are partly automated in that case study, but their code is not in this
 repository yet. Several results rest on small samples, and the research files say so (E07 and
 Q1 in `RESEARCH/00-INDEX.md`: six trials per defect class is "far too few" for correlation).
+
+## How it was built
+
+I built this project by directing AI coding agents (Claude Code): I set the goals, the
+constraints and the verification method, and reviewed the results; the agents wrote most of the
+code and documentation. The independent readers counted in E01, E02 and E05 were also separate
+agent runs, each given the scan and the source.
