@@ -39,8 +39,9 @@ You can do much better, and the way is **not a better recogniser**. It is four t
    worst."
 
 4. **Nothing is decided by a vote.** An ensemble buys *recall*; the source decides. This is not a
-   slogan - it is measured, and voting costs 43 points of recall on the one defect class that
-   matters most. See `RESEARCH/experiments/E01`.
+   slogan - it is measured: on structural defects, three readers together found all fourteen,
+   and a two-of-three majority would have shipped five of them (36 %), every one of them real.
+   See `RESEARCH/experiments/E01`.
 
 ## What this is not
 
@@ -108,5 +109,5 @@ has not been run on.
 
 Honest limits: one book has been processed end to end (the case study). Stages 3 to 6 of
 `DESIGN/ARCHITECTURE.md` are partly automated in that case study, but their code is not in this
-repository yet. Several results rest on small samples, and the experiment files say so (E07:
-six trials per defect class, "far too few" for correlation).
+repository yet. Several results rest on small samples, and the research files say so (E07 and
+Q1 in `RESEARCH/00-INDEX.md`: six trials per defect class is "far too few" for correlation).
