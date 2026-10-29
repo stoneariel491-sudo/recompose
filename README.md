@@ -1,5 +1,11 @@
 # recompose
 
+> **En bref (français).** recompose étudie comment transformer le scan d'un livre imprimé en
+> source composée (LaTeX) dont on peut *prouver* qu'elle dit la même chose que l'original. Ce
+> n'est pas un moteur d'OCR : c'est l'appareil de vérification autour de lui (instruments dont
+> on mesure les angles morts en y plantant des défauts, hypothèses écrites avant les résultats,
+> réfutations publiées) et le code Python des premières étapes du pipeline.
+
 **Turn a scan of a printed book into typeset source that provably says the same thing.**
 
 ---
@@ -49,8 +55,9 @@ Every method here was derived on a real book and not designed in the abstract: W
 Archive scan, recomposed to a declared standard of **contains nothing false**. That work produced
 104 numbered principles, each with the measurement that forced it, and about sixty tools.
 
-The case study lives in `../rudin-recompose`. What lives here is the general form: what
-transfers, what was specific to one book, and what is still an open question.
+The case study itself (the scan, the recomposed pages and its tools) lives in a separate
+repository that is not public. What lives here is the general form: what transfers, what was
+specific to one book, and what is still an open question.
 
 **The discipline of this repository is the discipline of that one.** A hypothesis is written
 down before the result. A refutation is a deliverable. A number is a fact about its population.
@@ -61,12 +68,45 @@ An instrument that cannot decide must never be the one that condemns.
     DESIGN/          the pipeline and its stages; what is automated, what is not, and why
     RESEARCH/        numbered findings, each with its evidence
       experiments/   one file per experiment: hypothesis BEFORE result, always
-      measurements/  raw numbers, so a claim can be recomputed rather than believed
     src/             the code
     tests/           including PLANTED defects, which is how recall is measured at all
+
+## Run it
+
+Python 3.10 or newer. The tests need only NumPy and build their own pages, so they run without
+any scan:
+
+    pip install -r requirements.txt
+    python -m unittest discover -s tests -v
+
+The pipeline stages also need Pillow, and stage 1 needs PyMuPDF to open the PDF
+(`pip install pillow pymupdf`; they are not in `requirements.txt` yet):
+
+    python src/ingest.py <scan.pdf> <output directory> [--pages 40-80]   # stage 1: leaves + manifest
+    python src/fit_layout.py <directory of page images> [--json]        # stage 2: fit the layout
+    python src/plant.py <config module>                                  # the instrument matrix
+
+`src/case_study_plants.py` is the adapter that wires the planting harness to the case study's
+own instruments; it expects that private case-study checkout on disk and is not runnable on
+its own.
+
+## What the code is
+
+| | |
+|---|---|
+| `src/ingest.py` | stage 1: classify each leaf of a scanned PDF by ink fraction, composite mixed-raster pages at the native resolution of their top layer, per-leaf Otsu threshold with a separability check, and a manifest that records how each leaf was obtained |
+| `src/fit_layout.py` | stage 2: fit measure, baseline pitch, text block and indent quantum from the leaves alone |
+| `src/geometry.py`, `src/frame.py` | the geometric primitives (deskew, ink rows, margins, line frames) the stages are built on |
+| `src/plant.py` | the planting harness: inject one known defect, rebuild, run each instrument, count what changed |
+| `tests/` | 27 unit tests on constructed pages whose right answer is known in advance |
 
 ## Status
 
 Early. The case study is at 94 % machine-verified and 8 % read line by line; the general form is
 being extracted from it while that reading proceeds. Nothing here is claimed to work on a book it
 has not been run on.
+
+Honest limits: one book has been processed end to end (the case study). Stages 3 to 6 of
+`DESIGN/ARCHITECTURE.md` are partly automated in that case study, but their code is not in this
+repository yet. Several results rest on small samples, and the experiment files say so (E07:
+six trials per defect class, "far too few" for correlation).
