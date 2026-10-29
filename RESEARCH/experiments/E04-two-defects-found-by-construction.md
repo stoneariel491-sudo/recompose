@@ -95,4 +95,5 @@ rule — turned out to be the correct specification in both cases. **Both primit
 against what they say they do, and both were found not to do it.**
 
 The practical consequence for the pipeline: every primitive gets constructed inputs before
-anything is built on it, and the tests run on every push rather than when someone remembers.
+anything is built on it, and the tests live in the repository so that they are run before every
+change rather than when someone remembers.
